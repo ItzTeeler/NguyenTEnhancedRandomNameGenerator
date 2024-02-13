@@ -70,16 +70,28 @@ const GetRandomGroups = (sliderValue) => {
     let groupSize = parseInt(sliderValue);
     let numberOfGroups = Math.ceil(numberOfPeople / groupSize);
     let randomNames = randomize(saveNameArray);
-
+    let arrays = [];
     displayGroupNames.innerHTML = "";
 
     for (let i = 0; i < numberOfGroups; i++) {
         let firstIndex = i * groupSize;
         let lastIndex = (i + 1) * groupSize;
         let group = randomNames.slice(firstIndex, lastIndex);
+        
+        if (group.length === 1 && arrays.length > 0) {
+            arrays[arrays.length - 1].push(group[0]);
+        } else {
+            arrays.push(group);
+        }
+        console.log(arrays)
         displayGroup(group, i + 1);
     }
 }
+
+
+
+
+
 
 function randomize(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -92,13 +104,16 @@ function randomize(array) {
 
 function displayGroup(group, num) {
     let div = document.createElement("div");
+
     let p1 = document.createElement("p");
     p1.innerText = `Group ${num}:`;
+
     group.map(name => {
         let div2 = document.createElement("div");
         div2.innerText = name;
         p1.appendChild(div2);
     });
+    
     div.appendChild(p1);
     displayGroupNames.appendChild(div);
 }
